@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forest Jade — Works</title>
+<meta name="description" content="Forest Jade. Original paintings by Giada.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#eee7d8;
+    --ink-dim:#b9b0a0;
+    --bg:#100d0a;
+    --bg-panel:#171310;
+    --line: rgba(238,231,216,0.16);
+    --accent:#c9b896;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{
+    scroll-behavior:smooth;
+    scroll-snap-type: y mandatory;
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Jost', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+
+  ::selection{ background:var(--accent); color:var(--bg); }
+
+  /* ---------- Home gallery (Page 1) ---------- */
+  main{ position:relative; }
+
+  .work{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    height:100vh;
+    width:100%;
+    position:relative;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+  }
+
+  .work .pane{
+    position:relative;
+    height:100%;
+    overflow:hidden;
+  }
+
+  .work .pane img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    filter:saturate(0.95);
+    transform:scale(1.02);
+    transition:transform 1.6s cubic-bezier(.16,.8,.24,1), filter .8s ease;
+  }
+
+  .work:hover .pane img{
+    transform:scale(1.07);
+    filter:saturate(1.05);
+  }
+
+  .pane::after{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0) 32%),
+      linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0) 22%),
+      linear-gradient(to top, rgba(0,0,0,0.3), rgba(0,0,0,0) 40%);
+    pointer-events:none;
+  }
+
+  .word{
+    position:absolute;
+    top:50%;
+    left:52px;
+    transform:translateY(-50%);
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    font-size:clamp(1.4rem, 2.4vw, 2.1rem);
+    color:var(--ink);
+    letter-spacing:0.02em;
+    z-index:5;
+    pointer-events:none;
+    text-shadow:0 2px 10px rgba(0,0,0,0.6), 0 2px 24px rgba(0,0,0,0.5);
+    opacity:0.94;
+  }
+
+  /* ================= Work detail (Page 2) ================= */
+  .work-detail{
+    position:fixed;
+    inset:0;
+    background:var(--bg-panel);
+    z-index:100;
+    transform:translateY(100%);
+    transition:transform .8s cubic-bezier(.16,.8,.24,1);
+    overflow:hidden;
+  }
+  .work-detail.open{ transform:translateY(0); }
+
+  .close-btn{
+    position:absolute;
+    top:26px;
+    right:26px;
+    z-index:10;
+    background:none;
+    border:none;
+    color:#000;
+    font-size:1.3rem;
+    line-height:1;
+    cursor:pointer;
+    opacity:0.85;
+    font-family:'Jost', sans-serif;
+    padding:6px;
+    transition:opacity .3s ease;
+  }
+  .close-btn:hover{ opacity:1; }
+
+  .detail-grid{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    height:100vh;
+  }
+
+  .detail-images{
+    display:flex;
+    flex-direction:row;
+    height:100vh;
+  }
+  .detail-images .img-wrap{
+    flex:1;
+    overflow:hidden;
+    background:#0b0906;
+  }
+  .detail-images img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .detail-images .img-wrap + .img-wrap{
+    border-left:1px solid var(--line);
+  }
+
+  .detail-info{
+    height:100vh;
+    overflow:hidden;
+    padding:0 clamp(28px, 4vw, 64px);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    background:#efe7d8;
+    color:#221c16;
+  }
+
+  .detail-info .eyebrow{
+    font-size:0.7rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:rgba(34,28,22,0.55);
+    margin-bottom:clamp(8px, 1.4vh, 14px);
+  }
+  .detail-info h1{
+    font-family:'EB Garamond', serif;
+    font-weight:400;
+    font-size:clamp(1.6rem, 2.4vw, 2.3rem);
+    margin-bottom:clamp(6px, 1.1vh, 10px);
+    color:#1a140f;
+  }
+  .detail-info .specs{
+    font-size:0.78rem;
+    color:rgba(34,28,22,0.65);
+    letter-spacing:0.02em;
+    margin-bottom:clamp(12px, 2.2vh, 20px);
+    padding-bottom:clamp(10px, 1.8vh, 16px);
+    border-bottom:1px solid rgba(34,28,22,0.18);
+  }
+  .detail-info .specs div{ margin-bottom:2px; }
+
+  .description{
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    font-size:clamp(0.78rem, 0.55vw + 0.55vh, 0.95rem);
+    line-height:1.48;
+    color:#2a2118;
+  }
+  .description p{ margin-bottom:clamp(6px, 1.2vh, 11px); }
+  .description p:last-child{ margin-bottom:0; }
+
+  .inquiries-block{
+    margin-top:clamp(12px, 2.4vh, 22px);
+    padding-top:clamp(10px, 1.8vh, 16px);
+    border-top:1px solid rgba(34,28,22,0.18);
+  }
+  .inquiries-block .eyebrow{ margin-bottom:clamp(10px, 1.8vh, 16px); }
+
+  .inquiry-form{
+    display:flex;
+    gap:0;
+    align-items:stretch;
+    max-width:440px;
+  }
+  .inquiry-form input{
+    flex:1;
+    background:none;
+    border:none;
+    border-bottom:1px solid rgba(34,28,22,0.3);
+    color:#221c16;
+    font-family:'Jost', sans-serif;
+    font-weight:300;
+    font-size:0.95rem;
+    padding:12px 4px;
+    outline:none;
+    transition:border-color .3s ease;
+  }
+  .inquiry-form input::placeholder{ color:rgba(34,28,22,0.45); }
+  .inquiry-form input:focus{ border-color:#221c16; }
+  .inquiry-form button{
+    font-family:'Jost', sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:#221c16;
+    background:#fbf8f1;
+    border:1px solid rgba(34,28,22,0.35);
+    padding:0 26px;
+    margin-left:14px;
+    cursor:pointer;
+    transition:background .3s ease, color .3s ease;
+    white-space:nowrap;
+  }
+  .inquiry-form button:hover{ background:#221c16; color:#fbf8f1; }
+
+  .sent-msg{
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    font-size:1rem;
+    color:#443628;
+    display:none;
+    margin-top:4px;
+  }
+
+  @media (max-width: 860px){
+    .work{ grid-template-columns:1fr; grid-template-rows:1fr 1fr; height:100vh; }
+    .word{ top:50%; transform:translateY(-50%); font-size:1.3rem; left:20px; }
+
+    .detail-grid{ grid-template-columns:1fr; grid-template-rows:28vh 72vh; height:100vh; }
+    .detail-images{ flex-direction:row; height:28vh; }
+    .detail-images .img-wrap + .img-wrap{ border-top:none; border-left:1px solid var(--line); }
+    .detail-info{ height:72vh; padding:14px 22px; }
+    .detail-info .eyebrow{ margin-bottom:clamp(4px, 0.8vh, 8px); }
+    .detail-info h1{ font-size:clamp(1.3rem, 5.5vw, 1.8rem); margin-bottom:clamp(4px, 0.8vh, 8px); }
+    .detail-info .specs{ font-size:0.68rem; margin-bottom:clamp(8px, 1.6vh, 14px); padding-bottom:clamp(6px, 1.2vh, 10px); }
+    .detail-info .specs div{ margin-bottom:1px; }
+    .description{ font-size:clamp(0.68rem, 2.4vw + 0.4vh, 0.85rem); line-height:1.38; }
+    .description p{ margin-bottom:clamp(4px, 0.9vh, 8px); }
+    .inquiries-block{ margin-top:clamp(8px, 1.6vh, 16px); padding-top:clamp(6px, 1.2vh, 12px); }
+    .close-btn{ top:16px; right:16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ PAGE 1 — home ============ -->
+<main id="top">
+
+  <!-- ============ WORK: underneath — duplicate this whole block, plus its entry in the WORKS object below, for each new piece ============ -->
+  <section class="work" onclick="openWork('underneath')">
+    <div class="pane" data-role="natural">
+      <img src="images/underneath-natural.jpg" alt="Natural texture — flowing paint and a dry leaf">
+      <span class="word">flow.</span>
+    </div>
+    <div class="pane" data-role="artwork">
+      <img src="images/underneath-artwork.jpg" alt="Underneath — acrylic painting, three pale forms on dark ground">
+      <span class="word">underneath.</span>
+    </div>
+  </section>
+
+  <!-- ============ WORK: underline ============ -->
+  <section class="work" onclick="openWork('underline')">
+    <div class="pane" data-role="natural">
+      <img src="images/underline-natural.jpg" alt="Natural texture — stone and wood grain">
+      <span class="word">trace.</span>
+    </div>
+    <div class="pane" data-role="artwork">
+      <img src="images/underline-artwork.jpg" alt="Underline — acrylic painting, a dark looping form around a small square green brushstroke">
+      <span class="word">underline.</span>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ PAGE 2 — work detail (populated dynamically by openWork) ============ -->
+<div class="work-detail" id="workDetail">
+  <button class="close-btn" onclick="closeWork()" aria-label="Close">✕</button>
+
+  <div class="detail-grid">
+    <div class="detail-images">
+      <div class="img-wrap">
+        <img id="wdImg1" src="" alt="">
+      </div>
+      <div class="img-wrap">
+        <img id="wdImg2" src="" alt="">
+      </div>
+    </div>
+
+    <div class="detail-info">
+      <div class="eyebrow">Original painting</div>
+      <h1 id="wdTitle"></h1>
+      <div class="specs" id="wdSpecs"></div>
+
+      <div class="description" id="wdDescription"></div>
+
+      <div class="inquiries-block">
+        <div class="eyebrow">Inquiries</div>
+        <form class="inquiry-form" id="inquiryForm" action="https://formspree.io/f/xyegvnad" method="POST" onsubmit="handleSubmit(event)">
+          <input type="email" id="email" name="email" required placeholder="your email">
+          <button type="submit">Send</button>
+        </form>
+        <div class="sent-msg" id="sentMsg">Thank you — I'll be in touch soon.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ============ Works data — add a new key here for each new piece ============
+  const WORKS = {
+    underneath: {
+      title: 'Underneath',
+      img1: 'images/underneath-detail.jpg',
+      img2: 'images/underneath-interior.jpg',
+      img1Alt: 'Underneath — full view of the painting on its easel',
+      img2Alt: 'Underneath — the painting shown framed in a living room',
+      specs: ['60 × 80 cm', 'Acrylic on canvas', 'Wooden floater frame included'],
+      description: [
+        'This painting is the translation of a path that began two years ago.',
+        'Beneath the visible surface is an earlier painting, complete, resolved, already "finished" in another sense. I covered it not to erase it, but so it could keep existing as structure rather than image.',
+        'The three forms emerging from the brown ground are a single gesture repeated three times, never identical — what remains once everything else is stripped away.',
+        'For the first time, I recognize in a piece not just a body of work, but an identity built, layer after layer, over these two years.'
+      ]
+    },
+    underline: {
+      title: 'Underline',
+      img1: 'images/underline-detail.jpg',
+      img2: 'images/underline-interior.jpg',
+      img1Alt: 'Underline — full view of the painting',
+      img2Alt: 'Underline — the painting framed above a rustic wooden console table',
+      specs: ['30 × 30 cm', 'Acrylic on canvas', 'Wooden floater frame included'],
+      description: [
+        'Before this, there was another painting — brighter, more playful, already whole in its own way.',
+        'I covered it. Not to erase what it was, but because it needed to become foundation rather than surface — the same instinct that shaped Underneath, here translated into something smaller, tighter.',
+        'The dark loop that fills the canvas is a single line, doubled back on itself until it becomes a knot.',
+        'Inside the loop, a small brushstroke of green jade stands apart. Nearly square, geometric, unlike anything else on the canvas. A single drip runs from it and becomes the only straight, horizontal line in the whole painting.',
+        'What gets underlined, stays.'
+      ]
+    }
+  };
+
+  function openWork(key){
+    const data = WORKS[key];
+    if (!data) return;
+
+    document.getElementById('wdTitle').textContent = data.title;
+    document.getElementById('wdSpecs').innerHTML = data.specs.map(s => '<div>' + s + '</div>').join('');
+    document.getElementById('wdDescription').innerHTML = data.description.map(p => '<p>' + p + '</p>').join('');
+
+    const img1 = document.getElementById('wdImg1');
+    const img2 = document.getElementById('wdImg2');
+    img1.src = data.img1; img1.alt = data.img1Alt;
+    img2.src = data.img2; img2.alt = data.img2Alt;
+
+    const el = document.getElementById('workDetail');
+    el.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    history.pushState({work:key}, '', '#' + key);
+  }
+
+  function closeWork(){
+    const el = document.getElementById('workDetail');
+    if (!el.classList.contains('open')) return;
+    el.classList.remove('open');
+    document.body.style.overflow = '';
+    if (location.hash) history.back();
+    // reset form state
+    const form = document.getElementById('inquiryForm');
+    form.reset();
+    form.style.display = 'flex';
+    const button = form.querySelector('button');
+    button.textContent = 'Send';
+    button.disabled = false;
+    document.getElementById('sentMsg').style.display = 'none';
+  }
+
+  window.addEventListener('popstate', () => {
+    const key = location.hash.replace('#', '');
+    if (!WORKS[key]){
+      document.getElementById('workDetail').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  function handleSubmit(e){
+    e.preventDefault();
+    const form = document.getElementById('inquiryForm');
+    const sentMsg = document.getElementById('sentMsg');
+    const button = form.querySelector('button');
+    const originalLabel = button.textContent;
+
+    button.textContent = 'Sending…';
+    button.disabled = true;
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(response => {
+      if (response.ok){
+        form.style.display = 'none';
+        sentMsg.textContent = "Thank you — I'll be in touch soon.";
+        sentMsg.style.color = '#443628';
+        sentMsg.style.display = 'block';
+      } else {
+        sentMsg.textContent = "Something went wrong — please try again, or write to me directly.";
+        sentMsg.style.color = '#8a3b2b';
+        sentMsg.style.display = 'block';
+        button.textContent = originalLabel;
+        button.disabled = false;
+      }
+    })
+    .catch(() => {
+      sentMsg.textContent = "Something went wrong — please try again, or write to me directly.";
+      sentMsg.style.color = '#8a3b2b';
+      sentMsg.style.display = 'block';
+      button.textContent = originalLabel;
+      button.disabled = false;
+    });
+  }
+</script>
+
+</body>
+</html>
