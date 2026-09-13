@@ -293,25 +293,27 @@
   }
 
   @media (max-width: 860px){
-    /* HOME MOBILE: full width, but NEVER crop the artwork/photo.
-       Each image keeps its natural aspect ratio, so no part of the painting is cut off. */
+    /* HOME MOBILE: each work is one vertical pair of true squares. */
     .work{
       grid-template-columns:1fr;
-      grid-template-rows:auto auto;
-      height:auto;
+      grid-template-rows:100vw 100vw;
+      height:200vw;
       min-height:0;
       width:100vw;
+      scroll-snap-align:start;
+      scroll-snap-stop:always;
     }
     .work .pane{
       width:100vw;
-      height:auto;
+      height:100vw;
+      aspect-ratio:1 / 1;
       overflow:hidden;
       background:#0b0906;
     }
     .work .pane img{
       width:100%;
-      height:auto;
-      object-fit:contain;
+      height:100%;
+      object-fit:cover;
       object-position:center;
       transform:none;
     }
@@ -332,23 +334,21 @@
       min-height:100dvh;
     }
 
-    /* The gallery itself is edge-to-edge. Its aspect ratio is updated by JS
-       to match the active image, so ALL images fill the width with no beige borders. */
+    /* DETAIL MOBILE: one fixed, large 3:4 frame for every slide. */
     .detail-images{
       position:relative;
       width:100vw;
       height:auto;
       min-height:0;
-      aspect-ratio:var(--mobile-gallery-ratio, 3 / 4);
-      background:#0b0906;
+      aspect-ratio:3 / 4;
+      background:#d8d1c5;
       overflow:hidden;
-      transition:aspect-ratio .25s ease;
     }
     .detail-slide{ inset:0; }
     .detail-slide img{
       width:100%;
       height:100%;
-      object-fit:contain; /* never crop the painting/photo on mobile */
+      object-fit:cover;
       object-position:center;
       display:block;
     }
@@ -427,7 +427,7 @@
       <span class="word">traces.</span>
     </div>
     <div class="pane" data-role="artwork">
-      <img src="images/unreadable-artwork.jpg" alt="Unreadable — four repeated black forms and a small red mark on a sand-coloured ground">
+      <img src="images/unreadable-artwork-square.png" alt="Unreadable — four repeated black forms and a small red mark on a sand-coloured ground">
       <span class="word">unreadable.</span>
     </div>
   </section>
@@ -486,7 +486,7 @@
       title: 'Underneath (sold)',
       images: [
         {src:'images/underneath-interior.jpg', alt:'Underneath — the painting shown framed in an interior'},
-        {src:'images/underneath-framed-square.png', alt:'Underneath — full view of the framed painting'},
+        {src:'images/underneath-framed-square.png', mobileSrc:'images/underneath-framed-portrait.png', alt:'Underneath — full view of the framed painting'},
         {src:'images/underneath-detail-v2.jpg', alt:'Underneath — close detail of the painting'}
       ],
       inquiryLabel: 'Commission a similar work',
@@ -502,7 +502,7 @@
       title: 'Unreadable',
       images: [
         {src:'images/unreadable-interior.jpg', alt:'Unreadable — the painting shown in a calm interior'},
-        {src:'images/unreadable-artwork-square.png', alt:'Unreadable — full view of the framed painting'},
+        {src:'images/unreadable-artwork-square.png', mobileSrc:'images/unreadable-artwork-portrait.png', alt:'Unreadable — full view of the framed painting'},
         {src:'images/unreadable-detail.jpg', alt:'Unreadable — close detail of the red mark and black gesture'}
       ],
       inquiryLabel: 'Inquiries',
@@ -522,7 +522,7 @@
       title: 'Underline',
       images: [
         {src:'images/underline-interior-dark-frame.png', alt:'Underline — the painting in a dark floater frame above a rustic wooden console table'},
-        {src:'images/underline-artwork-square.png', alt:'Underline — full view of the framed painting'},
+        {src:'images/underline-artwork-square.png', mobileSrc:'images/underline-artwork-portrait.png', alt:'Underline — full view of the framed painting'},
         {src:'images/underline-detail-v2.jpg', alt:'Underline — close detail of the green mark and black gesture'}
       ],
       inquiryLabel: 'Inquiries',
@@ -540,32 +540,14 @@
   let currentSlide = 0;
   let touchStartX = 0;
 
-  function updateMobileGalleryRatio(img){
-    if (window.innerWidth > 860 || !img) return;
-    const gallery = document.getElementById('detailGallery');
-    const applyRatio = () => {
-      if (img.naturalWidth && img.naturalHeight){
-        gallery.style.setProperty('--mobile-gallery-ratio', img.naturalWidth + ' / ' + img.naturalHeight);
-      }
-    };
-    if (img.complete) applyRatio();
-    else img.addEventListener('load', applyRatio, {once:true});
-  }
-
   function showSlide(index){
     const slides = Array.from(document.querySelectorAll('.detail-slide'));
     currentSlide = (index + slides.length) % slides.length;
     slides.forEach((slide, i) => slide.classList.toggle('active', i === currentSlide));
     document.getElementById('galleryCount').textContent = (currentSlide + 1) + ' / ' + slides.length;
-    updateMobileGalleryRatio(slides[currentSlide].querySelector('img'));
   }
 
   function changeSlide(direction){ showSlide(currentSlide + direction); }
-
-  window.addEventListener('resize', () => {
-    const active = document.querySelector('.detail-slide.active img');
-    updateMobileGalleryRatio(active);
-  });
 
   function openWork(key){
     const data = WORKS[key];
@@ -577,7 +559,7 @@
 
     data.images.forEach((image, index) => {
       const img = document.getElementById('wdImg' + (index + 1));
-      img.src = image.src;
+      img.src = window.innerWidth <= 860 && image.mobileSrc ? image.mobileSrc : image.src;
       img.alt = image.alt;
     });
     document.getElementById('inquiryLabel').textContent = data.inquiryLabel;
