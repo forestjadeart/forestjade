@@ -73,20 +73,6 @@
     filter:saturate(1.05);
   }
 
-  /* Underneath: slightly smaller and centered on the homepage */
-  .work .pane.underneath-home-artwork{
-    background:#d8d1c5;
-  }
-
-  .work .pane.underneath-home-artwork img{
-    object-position:center;
-    transform:scale(.92);
-  }
-
-  .work:hover .pane.underneath-home-artwork img{
-    transform:scale(.97);
-  }
-
   .pane::after{
     content:"";
     position:absolute; inset:0;
@@ -339,8 +325,8 @@
       <img src="images/underneath-natural.jpg" alt="Natural texture — flowing paint and a dry leaf">
       <span class="word">flow.</span>
     </div>
-    <div class="pane underneath-home-artwork" data-role="artwork">
-      <img src="images/underneath-framed.jpg" alt="Underneath — framed acrylic painting, three pale forms on dark ground">
+    <div class="pane" data-role="artwork">
+      <img src="images/underneath-framed-square.png" alt="Underneath — framed acrylic painting, three pale forms on dark ground">
       <span class="word">underneath.</span>
     </div>
   </section>
@@ -427,7 +413,7 @@
       title: 'Unreadable',
       images: [
         {src:'images/unreadable-interior.jpg', alt:'Unreadable — the painting shown in a calm interior'},
-        {src:'images/unreadable-artwork.jpg', alt:'Unreadable — full view of the painting'},
+        {src:'images/unreadable-artwork-square.png', alt:'Unreadable — full view of the framed painting'},
         {src:'images/unreadable-detail.jpg', alt:'Unreadable — close detail of the red mark and black gesture'}
       ],
       inquiryLabel: 'Inquiries',
@@ -447,7 +433,7 @@
       title: 'Underline',
       images: [
         {src:'images/underline-interior-v2.jpg', alt:'Underline — the painting framed above a rustic wooden console table'},
-        {src:'images/underline-artwork.jpg', alt:'Underline — full view of the painting'},
+        {src:'images/underline-artwork-square.png', alt:'Underline — full view of the framed painting'},
         {src:'images/underline-detail-v2.jpg', alt:'Underline — close detail of the green mark and black gesture'}
       ],
       inquiryLabel: 'Inquiries',
