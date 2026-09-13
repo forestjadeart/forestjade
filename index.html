@@ -73,6 +73,20 @@
     filter:saturate(1.05);
   }
 
+  /* Underneath: slightly smaller and centered on the homepage */
+  .work .pane.underneath-home-artwork{
+    background:#d8d1c5;
+  }
+
+  .work .pane.underneath-home-artwork img{
+    object-position:center;
+    transform:scale(.92);
+  }
+
+  .work:hover .pane.underneath-home-artwork img{
+    transform:scale(.97);
+  }
+
   .pane::after{
     content:"";
     position:absolute; inset:0;
@@ -157,6 +171,17 @@
     height:100%;
     object-fit:cover;
     display:block;
+  }
+  .detail-slide.framed-centered{
+    background:#d8d1c5;
+  }
+  .detail-slide.framed-centered img{
+    position:absolute;
+    inset:7.5%;
+    width:85%;
+    height:85%;
+    object-fit:contain;
+    object-position:center;
   }
   .gallery-btn{
     position:absolute;
@@ -325,7 +350,7 @@
       <img src="images/underneath-natural.jpg" alt="Natural texture — flowing paint and a dry leaf">
       <span class="word">flow.</span>
     </div>
-    <div class="pane" data-role="artwork">
+    <div class="pane underneath-home-artwork" data-role="artwork">
       <img src="images/underneath-framed.jpg" alt="Underneath — framed acrylic painting, three pale forms on dark ground">
       <span class="word">underneath.</span>
     </div>
@@ -397,7 +422,7 @@
       title: 'Underneath (sold)',
       images: [
         {src:'images/underneath-interior.jpg', alt:'Underneath — the painting shown framed in an interior'},
-        {src:'images/underneath-framed.jpg', alt:'Underneath — full view of the framed painting'},
+        {src:'images/underneath-framed.jpg', alt:'Underneath — full view of the framed painting', layout:'framed-centered'},
         {src:'images/underneath-detail-v2.jpg', alt:'Underneath — close detail of the painting'}
       ],
       inquiryLabel: 'Commission a similar work',
@@ -472,6 +497,7 @@
       const img = document.getElementById('wdImg' + (index + 1));
       img.src = image.src;
       img.alt = image.alt;
+      img.closest('.detail-slide').classList.toggle('framed-centered', image.layout === 'framed-centered');
     });
     document.getElementById('inquiryLabel').textContent = data.inquiryLabel;
     showSlide(0);
