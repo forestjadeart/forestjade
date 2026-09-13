@@ -172,17 +172,6 @@
     object-fit:cover;
     display:block;
   }
-  .detail-slide.framed-centered{
-    background:#d8d1c5;
-  }
-  .detail-slide.framed-centered img{
-    position:absolute;
-    inset:7.5%;
-    width:85%;
-    height:85%;
-    object-fit:contain;
-    object-position:center;
-  }
   .gallery-btn{
     position:absolute;
     top:50%;
@@ -422,7 +411,7 @@
       title: 'Underneath (sold)',
       images: [
         {src:'images/underneath-interior.jpg', alt:'Underneath — the painting shown framed in an interior'},
-        {src:'images/underneath-framed.jpg', alt:'Underneath — full view of the framed painting', layout:'framed-centered'},
+        {src:'images/underneath-framed-square.png', alt:'Underneath — full view of the framed painting'},
         {src:'images/underneath-detail-v2.jpg', alt:'Underneath — close detail of the painting'}
       ],
       inquiryLabel: 'Commission a similar work',
@@ -497,7 +486,6 @@
       const img = document.getElementById('wdImg' + (index + 1));
       img.src = image.src;
       img.alt = image.alt;
-      img.closest('.detail-slide').classList.toggle('framed-centered', image.layout === 'framed-centered');
     });
     document.getElementById('inquiryLabel').textContent = data.inquiryLabel;
     showSlide(0);
